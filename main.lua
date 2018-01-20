@@ -79,6 +79,7 @@ function Button(x, y, w, h, event)
   button.y = y
   button.w = w
   button.h = h
+  button.event = event
   button.pressed = false
 
   function button:touchIsIn(touchId)
