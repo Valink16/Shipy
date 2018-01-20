@@ -65,7 +65,7 @@ function love.load()
     love.window.setMode(1280, 720)
     love.graphics.setBackgroundColor(0, 0, 32, 0)
     sys.buttons = {
-      Button(0, love.graphics.getHeight() - 64 * gameScale, 64, 64, sys.ships[1].shoot()),
+      Button(0, love.graphics.getHeight() - 64 * gameScale, 64, 64, sys.ships[1].shoot),
       --Button(love.graphics.getWidth() - 192 * gameScale, love.graphics.getHeight() - 64 * gameScale, 64, 64, "left"),
       --Button(love.graphics.getWidth() - 64 * gameScale, love.graphics.getHeight() - 64 * gameScale, 64, 64, "right"),
       --Button(love.graphics.getWidth() - 128 * gameScale, love.graphics.getHeight() - 128 * gameScale, 64, 64, "up")
