@@ -26,10 +26,10 @@ function love.load()
 
 
     local buttons = {
-      Button(0, love.graphics.getHeight() - 64 * gameScale, 64, 64, "space"),
-      Button(love.graphics.getWidth() - 192 * gameScale, love.graphics.getHeight() - 64 * gameScale, 64, 64, "left"),
-      Button(love.graphics.getWidth() - 64 * gameScale, love.graphics.getHeight() - 64 * gameScale, 64, 64, "right"),
-      Button(love.graphics.getWidth() - 128 * gameScale, love.graphics.getHeight() - 128 * gameScale, 64, 64, "up")
+      Button(0, love.graphics.getHeight() - 64 * gameScale, 64, 64, sys.ships[1].shoot()),
+      --Button(love.graphics.getWidth() - 192 * gameScale, love.graphics.getHeight() - 64 * gameScale, 64, 64, "left"),
+      --Button(love.graphics.getWidth() - 64 * gameScale, love.graphics.getHeight() - 64 * gameScale, 64, 64, "right"),
+      --Button(love.graphics.getWidth() - 128 * gameScale, love.graphics.getHeight() - 128 * gameScale, 64, 64, "up")
     }
 
     -- Metatables
@@ -73,13 +73,13 @@ function love.load()
 
 end
 
-function Button(x, y, w, h, event)
+function Button(x, y, w, h, action)
   local button = {}
   button.x = x
   button.y = y
   button.w = w
   button.h = h
-  button.event = event
+  button.action = action
   button.pressed = false
 
   function button:touchIsIn(touchId)
@@ -279,7 +279,7 @@ function love.update(dt)
     for i, id in pairs(love.touch.getTouches()) do
       for a, b in pairs(sys.buttons) do
         if b:touchIsIn(id) then
-          love.event.push(b.event)
+          b.action()
         end
       end
     end
