@@ -66,9 +66,9 @@ function love.load()
     love.graphics.setBackgroundColor(0, 0, 32, 0)
     sys.buttons = {
       Button(0, love.graphics.getHeight() - 64 * gameScale, 64, 64, sys.ships[1].shoot),
-      --Button(love.graphics.getWidth() - 192 * gameScale, love.graphics.getHeight() - 64 * gameScale, 64, 64, "left"),
-      --Button(love.graphics.getWidth() - 64 * gameScale, love.graphics.getHeight() - 64 * gameScale, 64, 64, "right"),
-      --Button(love.graphics.getWidth() - 128 * gameScale, love.graphics.getHeight() - 128 * gameScale, 64, 64, "up")
+      Button(love.graphics.getWidth() - 192 * gameScale, love.graphics.getHeight() - 64 * gameScale, 64, 64, sys.ships[1].left),
+      Button(love.graphics.getWidth() - 64 * gameScale, love.graphics.getHeight() - 64 * gameScale, 64, 64, sys.ships[1].right),
+      Button(love.graphics.getWidth() - 128 * gameScale, love.graphics.getHeight() - 128 * gameScale, 64, 64, sys.ships[1].thrust)
     }
 end
 
@@ -143,8 +143,8 @@ function Ship(x, y, r, id)
 
   function ship:control()
     if love.keyboard.isDown("up") then ship.thrust() end
-    if love.keyboard.isDown("left") then ship.r = ship.r - 0.1 end
-    if love.keyboard.isDown("right") then ship.r = ship.r + 0.1 end
+    if love.keyboard.isDown("left") then ship.left() end
+    if love.keyboard.isDown("right") then ship.right() end
     if love.keyboard.isDown("space") then ship.shoot() end
   end
 
@@ -160,6 +160,14 @@ function Ship(x, y, r, id)
 
   function ship:shoot()
     table.insert(sys.bullets, Bullet(ship.x, ship.y, Vector(math.cos(ship.r), math.sin(ship.r)), ship.r, 1))
+  end
+
+  function ship:left()
+    ship.r = ship.r - ships[ship.id].turnRate
+  end
+
+  function ship:right()
+    ship.r = ship.r + ships[ship.id].turnRate
   end
 
   function ship:debug()
