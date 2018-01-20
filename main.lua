@@ -24,14 +24,13 @@ function love.load()
       }
     }
 
-    if useButtons then
-      local buttons = {
-        Button(0, love.graphics.getHeight() - 64 * gameScale, 64, 64, "space"),
-        Button(love.graphics.getWidth() - 192 * gameScale, love.graphics.getHeight() - 64 * gameScale, 64, 64, "left"),
-        Button(love.graphics.getWidth() - 64 * gameScale, love.graphics.getHeight() - 64 * gameScale, 64, 64, "right"),
-        Button(love.graphics.getWidth() - 128 * gameScale, love.graphics.getHeight() - 128 * gameScale, 64, 64, "up")
-      }
-    end
+
+    local buttons = {
+      Button(0, love.graphics.getHeight() - 64 * gameScale, 64, 64, "space"),
+      Button(love.graphics.getWidth() - 192 * gameScale, love.graphics.getHeight() - 64 * gameScale, 64, 64, "left"),
+      Button(love.graphics.getWidth() - 64 * gameScale, love.graphics.getHeight() - 64 * gameScale, 64, 64, "right"),
+      Button(love.graphics.getWidth() - 128 * gameScale, love.graphics.getHeight() - 128 * gameScale, 64, 64, "up")
+    }
 
     -- Metatables
       -- Vector
@@ -70,7 +69,7 @@ function love.load()
     table.insert(sys.ships, Ship(240, 160, 0, 1))
     love.window.setMode(1280, 720)
     love.graphics.setBackgroundColor(0, 0, 32, 0)
-    if useButtons then sys.buttons = buttons end
+    sys.buttons = buttons
 
 end
 
@@ -204,7 +203,7 @@ function PartSys() -- To manage every drawed object
   sys.ships = {}
   sys.bullets = {}
   sys.particles = {}
-  if useButtons then sys.buttons = {} end
+  sys.buttons = {}
 
   function sys:updateAll()
     sys.updateShips()
