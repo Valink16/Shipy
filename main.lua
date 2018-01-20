@@ -273,7 +273,7 @@ function love.update(dt)
   if useButtons then
     for i, id in pairs(love.touch.getTouches()) do
       for a, b in pairs(sys.buttons) do
-        if b.touchIsIn(id) then
+        if b:touchIsIn(id) then
           love.event.push(b.event)
         end
       end
