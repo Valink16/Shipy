@@ -79,6 +79,7 @@ function Button(x, y, w, h, event)
   button.y = y
   button.w = w
   button.h = h
+  button.pressed = false
 
   function button:touchIsIn(touchId)
     local x, y = love.touch.getPosition(touchId)
@@ -86,13 +87,16 @@ function Button(x, y, w, h, event)
        x > button.x + button.w or
        y < button.y or
        y > button.y + button.h then
+      button.pressed = false
       return false
     else
+      button.pressed = true
       return true
     end
   end
 
   function button:draw()
+    if button.pressed then love.graphics.setColor(0, 0, 255, 255)
     love.graphics.rectangle("fill", button.x, button.y, button.w * gameScale, button.h * gameScale)
   end
 
