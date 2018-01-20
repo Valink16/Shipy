@@ -96,7 +96,7 @@ function Button(x, y, w, h, event)
   end
 
   function button:draw()
-    if button.pressed then love.graphics.setColor(0, 0, 255, 255)
+    if button.pressed then love.graphics.setColor(0, 0, 255, 255) end
     love.graphics.rectangle("fill", button.x, button.y, button.w * gameScale, button.h * gameScale)
   end
 
