@@ -83,15 +83,15 @@ function Button(x, y, w, h, event)
 
   function button:touchIsIn(touchId)
     local x, y = love.touch.getPosition(touchId)
-    if x < button.x or
-       x > button.x + button.w or
-       y < button.y or
-       y > button.y + button.h then
-      button.pressed = false
-      return false
-    else
+    if x > button.x and
+       x < button.x + button.w and
+       y > button.y and
+       y < button.y + button.h then
       button.pressed = true
       return true
+    else
+      button.pressed = false
+      return false
     end
   end
 
