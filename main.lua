@@ -84,9 +84,9 @@ function Button(x, y, w, h, event)
   function button:touchIsIn(touchId)
     local x, y = love.touch.getPosition(touchId)
     if x > button.x and
-       x < button.x + button.w and
+       x < button.x + button.w * gameScale and
        y > button.y and
-       y < button.y + button.h then
+       y < button.y + button.h * gameScale then
       button.pressed = true
       return true
     else
