@@ -64,7 +64,7 @@ function love.load()
     table.insert(sys.ships, Ship(240, 160, 0, 1))
     love.window.setMode(1280, 720)
     love.graphics.setBackgroundColor(0, 0, 32, 0)
-    local buttonSize = 64
+    buttonSize = love.graphics.getWidth() / 10
     sys.buttons = {
 
       Button(0, love.graphics.getHeight() - buttonSize, buttonSize, buttonSize, sys.ships[1].shoot),
@@ -86,9 +86,9 @@ function Button(x, y, w, h, action)
   function button:touchIsIn(touchId)
     local x, y = love.touch.getPosition(touchId)
     if x > button.x and
-       x < button.x + button.w * gameScale and
+       x < button.x + button.w and
        y > button.y and
-       y < button.y + button.h * gameScale then
+       y < button.y + button.h then
       button.pressed = true
       return true
     else
@@ -99,7 +99,7 @@ function Button(x, y, w, h, action)
 
   function button:draw()
     if button.pressed then love.graphics.setColor(0, 0, 255, 255) end
-    love.graphics.rectangle("fill", button.x, button.y, button.w * gameScale, button.h * gameScale)
+    love.graphics.rectangle("fill", button.x, button.y, button.w, button.h)
     love.graphics.setColor(255, 255, 255, 255)
   end
 
