@@ -6,7 +6,6 @@ function love.load()
   updateTime = 0
   gameScale = love.graphics.getWidth() / 512-- Only need x scale because all the images will be squares
   useButtons = love.system.getOS() == "Android" or love.system.getOS() == "iOS"
-  print("OS: "..love.system.getOS().." : "..tostring(useButtons))
   -- CONSTANTS
     -- Ships
     ships = {
@@ -210,6 +209,11 @@ function Debug()
   function debug:getFps()
     return love.timer.getFPS()
   end
+
+  function debug:getSysStats(partSys)
+    return "Ships: "..tostring(#partSys.ships).." Bullets: "..tostring(#partSys.bullets).." Particles: "..tostring(#partSys.particles)
+  end
+
   return debug
 end
 
@@ -295,6 +299,11 @@ function love.update(dt)
     end
   end
 
+  -- General key events
+  if love.keyboard.isDown("escape") then
+    love.event.quit(0)
+  end
+
   updateTime = love.timer.getTime() - updateTime
 end
 
@@ -305,6 +314,6 @@ function love.draw()
   love.graphics.print("dt: "..tostring(drawTime), 0, 12)
   love.graphics.print("ut: "..tostring(updateTime), 0, 24)
   love.graphics.print(love.timer.getFPS(), 0, 36)
-  love.graphics.print(tostring(useButtons), 0, 48)
+  love.graphics.print(debugSys:getSysStats(sys), 0, 48)
   drawTime = love.timer.getTime() - oldDrawTime
 end
