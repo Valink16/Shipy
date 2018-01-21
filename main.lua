@@ -65,10 +65,11 @@ function love.load()
     love.window.setMode(1280, 720)
     love.graphics.setBackgroundColor(0, 0, 32, 0)
     sys.buttons = {
-      Button(0, love.graphics.getHeight() - 64 * gameScale, love.graphics.getHeight() / 10, love.graphics.getHeight() / 10, sys.ships[1].shoot),
-      Button(love.graphics.getWidth() - 192 * gameScale, love.graphics.getHeight() - 64 * gameScale, love.graphics.getHeight() / 10, love.graphics.getHeight() / 10, sys.ships[1].left),
-      Button(love.graphics.getWidth() - 64 * gameScale, love.graphics.getHeight() - 64 * gameScale, love.graphics.getHeight() / 10, love.graphics.getHeight() / 10, sys.ships[1].right),
-      Button(love.graphics.getWidth() - 128 * gameScale, love.graphics.getHeight() - 128 * gameScale, love.graphics.getHeight() / 10, love.graphics.getHeight() / 10, sys.ships[1].thrust)
+      local buttonSize = love.graphics.getWidth() / 10
+      Button(0, love.graphics.getHeight() - buttonSize * gameScale, buttonSize, buttonSize, sys.ships[1].shoot),
+      Button(love.graphics.getWidth() - buttonSize * 3 * gameScale, love.graphics.getHeight() - buttonSize * gameScale, buttonSize, buttonSize, sys.ships[1].left),
+      Button(love.graphics.getWidth() - buttonSize * gameScale, love.graphics.getHeight() - buttonSize * gameScale, buttonSize, buttonSize, sys.ships[1].right),
+      Button(love.graphics.getWidth() - buttonSize * 2 * gameScale, love.graphics.getHeight() - buttonSize * 2 * gameScale, buttonSize, buttonSize, sys.ships[1].thrust)
     }
 end
 
