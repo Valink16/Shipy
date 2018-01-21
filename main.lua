@@ -67,10 +67,10 @@ function love.load()
     local buttonSize = love.graphics.getWidth() / 10
     sys.buttons = {
 
-      Button(0, love.graphics.getHeight() - buttonSize * gameScale, buttonSize, buttonSize, sys.ships[1].shoot),
-      Button(love.graphics.getWidth() - buttonSize * 3 * gameScale, love.graphics.getHeight() - buttonSize * gameScale, buttonSize, buttonSize, sys.ships[1].left),
-      Button(love.graphics.getWidth() - buttonSize * gameScale, love.graphics.getHeight() - buttonSize * gameScale, buttonSize, buttonSize, sys.ships[1].right),
-      Button(love.graphics.getWidth() - buttonSize * 2 * gameScale, love.graphics.getHeight() - buttonSize * 2 * gameScale, buttonSize, buttonSize, sys.ships[1].thrust)
+      Button(0, love.graphics.getHeight() - buttonSize, buttonSize, buttonSize, sys.ships[1].shoot),
+      Button(love.graphics.getWidth() - buttonSize * 3, love.graphics.getHeight() - buttonSize, buttonSize, buttonSize, sys.ships[1].left),
+      Button(love.graphics.getWidth() - buttonSize, love.graphics.getHeight() - buttonSize, buttonSize, buttonSize, sys.ships[1].right),
+      Button(love.graphics.getWidth() - buttonSize * 2, love.graphics.getHeight() - buttonSize * 2, buttonSize, buttonSize, sys.ships[1].thrust)
     }
 end
 
