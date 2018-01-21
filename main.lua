@@ -61,7 +61,7 @@ function love.load()
     --table.insert(sys.ships, Ship(240, i, 0, 1))
     --end
     table.insert(sys.ships, Ship(240, 160, 0, 1))
-    love.window.setMode(1280, 720)
+    love.window.setMode(640, 360)
     love.graphics.setBackgroundColor(0, 0, 32, 0)
     buttonSize = love.graphics.getWidth() / 10
     sys.buttons = {
