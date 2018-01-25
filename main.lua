@@ -119,7 +119,6 @@ function Vector(vx, vy)
         local d = vector.length() / limit
         vector.x = vector.x / d
         vector.y = vector.y / d
-        print(d, vector.x, vector.y)
       end
 
     end
@@ -185,10 +184,19 @@ function Bullet(x, y, vel, r, id)
   bullet.r = r
   bullet.id = id
   bullet.vel = vel * bullets[bullet.id].speed
-
+  bullet.destroy = false
+  
   function bullet:update()
-    bullet.x = bullet.x + bullet.vel.x
-    bullet.y = bullet.y + bullet.vel.y
+    if bullet.x < love.graphics.getWidth() and
+    	  bullet.x > 0 and
+    	  bullet.y < love.graphics.getHeight() and
+    	  bullet.y > 0 then
+    	  
+      bullet.x = bullet.x + bullet.vel.x
+      bullet.y = bullet.y + bullet.vel.y
+    else
+      bullet.destroy = true
+    end
   end
 
   function bullet:draw()
@@ -247,6 +255,9 @@ function PartSys() -- To manage every drawed object
   function sys:updateBullets()
     for i, b in pairs(sys.bullets) do
       b.update()
+      if b.destroy then 
+        table.remove(sys.bullets, i)
+      end
     end
   end
 
