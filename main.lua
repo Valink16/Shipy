@@ -185,10 +185,18 @@ function Bullet(x, y, vel, r, id)
   bullet.r = r
   bullet.id = id
   bullet.vel = vel * bullets[bullet.id].speed
+  bullet.destroy = false
 
   function bullet:update()
     bullet.x = bullet.x + bullet.vel.x
     bullet.y = bullet.y + bullet.vel.y
+
+    if bullet.x > love.graphics.getWidth() or
+       bullet.x < 0 or
+       bullet.y > love.graphics.getHeight() or
+       bullet.y < 0 then
+      bullet.destroy = true
+    end
   end
 
   function bullet:draw()
@@ -247,6 +255,7 @@ function PartSys() -- To manage every drawed object
   function sys:updateBullets()
     for i, b in pairs(sys.bullets) do
       b.update()
+      if b.destroy then table.remove(sys.bullets, i) end
     end
   end
 
