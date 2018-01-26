@@ -67,8 +67,8 @@ function love.load()
         }
       }
 
-    for i= -100, wx + 100, wx / 10 do
-      for a= -100, wy + 100, wy / 10 do
+    for i= -wx / 5, wx + wx / 5, wx / 10 do
+      for a= -wx / 5, wy + wx / 5, wy / 10 do
         table.insert(sys.stars, Star(math.random(i-50, i+50),math.random(a-50, a+50),0,sys.cam))
       end
     end
