@@ -4,9 +4,22 @@ function love.load()
   sys = PartSys()
   drawTime = 0
   updateTime = 0
-  gameScale = love.graphics.getWidth() / 512-- Only need x scale because all the images will be squares
   useButtons = love.system.getOS() == "Android" or love.system.getOS() == "iOS"
+
+  love.window.setMode(640, 360)
+  gameScale = love.graphics.getWidth() / 512-- Only need x scale because all the images will be squares
+  wx = love.graphics.getWidth()
+  wy = love.graphics.getHeight()
+  print(wx, wy)
+
   -- CONSTANTS
+
+    world = {
+      size = {
+        x = 10000,
+        y = 10000
+      }
+    }
     -- Ships
     ships = {
       -- player's ship
@@ -61,7 +74,7 @@ function love.load()
     --table.insert(sys.ships, Ship(240, i, 0, 1))
     --end
     table.insert(sys.ships, Ship(240, 160, 0, 1))
-    love.window.setMode(640, 360)
+
     love.graphics.setBackgroundColor(0, 0, 32, 0)
     buttonSize = love.graphics.getWidth() / 10
     sys.buttons = {
@@ -119,7 +132,6 @@ function Vector(vx, vy)
         local d = vector.length() / limit
         vector.x = vector.x / d
         vector.y = vector.y / d
-        print(d, vector.x, vector.y)
       end
 
     end
@@ -138,8 +150,8 @@ function Ship(x, y, r, id)
 
   ship.vel = Vector(0, 0)
 
-  function ship:draw()
-    love.graphics.draw(images.ships[ship.id], ship.x, ship.y, ship.r, gameScale, gameScale, 8, 8)
+  function ship:draw(cam)
+    love.graphics.draw(images.ships[ship.id], ship.x - cam.x, ship.y - cam.y, ship.r, gameScale, gameScale, 8, 8)
   end
 
   function ship:control()
@@ -191,16 +203,16 @@ function Bullet(x, y, vel, r, id)
     bullet.x = bullet.x + bullet.vel.x
     bullet.y = bullet.y + bullet.vel.y
 
-    if bullet.x > love.graphics.getWidth() or
-       bullet.x < 0 or
-       bullet.y > love.graphics.getHeight() or
-       bullet.y < 0 then
+    if bullet.x > world.size.x or
+       bullet.x < -world.size.x or
+       bullet.y > world.size.y or
+       bullet.y < -world.size.y then
       bullet.destroy = true
     end
   end
 
-  function bullet:draw()
-    love.graphics.draw(images.bullets[bullet.id], bullet.x, bullet.y, bullet.r, gameScale, gameScale, 8, 8)
+  function bullet:draw(cam)
+    love.graphics.draw(images.bullets[bullet.id], bullet.x - cam.x, bullet.y - cam.y, bullet.r, gameScale, gameScale, 8, 8)
   end
 
   return bullet
@@ -231,6 +243,10 @@ function PartSys() -- To manage every drawed object
   sys.bullets = {}
   sys.particles = {}
   sys.buttons = {}
+  sys.cam = { --Camera
+    x = 0,
+    y = 0
+  }
 
   function sys:updateAll()
     sys.updateShips()
@@ -239,16 +255,20 @@ function PartSys() -- To manage every drawed object
   end
 
   function sys:drawAll()
-    sys.drawShips()
-    sys.drawBullets()
-    sys.drawParticles()
+    sys:drawShips(sys.cam)
+    sys:drawBullets(sys.cam)
+    sys:drawParticles(sys.cam)
     if useButtons then sys.drawButtons() end
   end
 
   function sys:updateShips()
-    for i, s in pairs(sys.ships) do
+    for i, s in ipairs(sys.ships) do
       s.update()
-      s.control()
+      if i == 1 then
+        s.control()
+        sys.cam.x = s.x - wx / 2 + 8 -- -8 to center on ship image
+        sys.cam.y = s.y - wy / 2 + 8
+      end
     end
   end
 
@@ -265,27 +285,27 @@ function PartSys() -- To manage every drawed object
     end
   end
 
-  function sys:drawButtons()
+  function sys:drawButtons(cam)
     for i, b in pairs(sys.buttons) do
-      b.draw()
+      b:draw(cam)
     end
   end
 
-  function sys:drawShips()
+  function sys:drawShips(cam)
     for i, s in pairs(sys.ships) do
-      s.draw()
+      s:draw(cam)
     end
   end
 
-  function sys:drawBullets()
+  function sys:drawBullets(cam)
     for i, b in pairs(sys.bullets) do
-      b.draw()
+      b:draw(cam)
     end
   end
 
-  function sys:drawParticles()
+  function sys:drawParticles(cam)
     for i, p in pairs(sys.particles) do
-      p.draw()
+      p:draw(cam)
     end
   end
   return sys
@@ -307,11 +327,13 @@ function love.update(dt)
       end
     end
   end
-
-  -- General key events
-  if love.keyboard.isDown("escape") then
-    love.event.quit(0)
+  -- Controlling debug Camera
+  if love.keyboard.isDown("w") then
+    sys.cam.y = sys.cam.y - 1
+  elseif love.keyboard.isDown("s") then
+    sys.cam.y = sys.cam.y + 1
   end
+
 
   updateTime = love.timer.getTime() - updateTime
 end
