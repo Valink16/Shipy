@@ -16,15 +16,15 @@ function love.load()
 
     world = {
       size = {
-        x = 10000,
-        y = 10000
+        x = 100000,
+        y = 100000
       }
     }
     -- Ships
     ships = {
       -- player's ship
       {
-        maxSpeed = 3,
+        maxSpeed = 5,
         turnRate = 0.05
       }
     }
@@ -32,12 +32,9 @@ function love.load()
     bullets = {
       -- basic bullet
       {
-        speed = 4
+        speed = 7
       }
     }
-
-
-
 
     -- Metatables
       -- Vector
@@ -70,9 +67,11 @@ function love.load()
         }
       }
 
-    --for i=12, 360, 16 do
-    --table.insert(sys.ships, Ship(240, i, 0, 1))
-    --end
+    for i= -100, wx + 100, wx / 10 do
+      for a= -100, wy + 100, wy / 10 do
+        table.insert(sys.stars, Star(math.random(i-50, i+50),math.random(a-50, a+50),0,sys.cam))
+      end
+    end
     table.insert(sys.ships, Ship(240, 160, 0, 1))
 
     love.graphics.setBackgroundColor(0, 0, 32, 0)
@@ -133,13 +132,39 @@ function Vector(vx, vy)
         vector.x = vector.x / d
         vector.y = vector.y / d
       end
-
     end
 
     setmetatable(vector, m_Vector)
     return vector
 end
 
+function Star(x, y, d, cam)
+  local star = {}
+  star.x = x
+  star.y = y
+  star.ox = cam.x
+  star.oy = cam.y
+  star.depth = d
+
+  function star:draw(cam)
+    local x1 = star.ox - cam.x
+    local y1 = star.oy - cam.y
+    love.graphics.line(star.x, star.y, star.x + x1, star.y + y1)
+    star.ox = cam.x
+    star.oy = cam.y
+
+    star.x = star.x + x1
+    star.y = star.y + y1
+
+    if star.x > wx + 100 then star.x = math.random(-100, 0) end
+    if star.y > wy + 100 then star.y = math.random(-100, 0) end
+    if star.x < -100 then star.x = math.random(wx, wx + 100) end
+    if star.y < -100 then star.y = math.random(wy, wy + 100) end
+
+  end
+
+  return star
+end
 
 function Ship(x, y, r, id)
   local ship = {}
@@ -231,7 +256,7 @@ function Debug()
   end
 
   function debug:getSysStats(partSys)
-    return "Ships: "..tostring(#partSys.ships).." Bullets: "..tostring(#partSys.bullets).." Particles: "..tostring(#partSys.particles)
+    return "Ships: "..tostring(#partSys.ships).." Bullets: "..tostring(#partSys.bullets).." Particles: "..tostring(#partSys.particles).." Stars: "..tostring(#partSys.stars)
   end
 
   return debug
@@ -243,6 +268,7 @@ function PartSys() -- To manage every drawed object
   sys.bullets = {}
   sys.particles = {}
   sys.buttons = {}
+  sys.stars = {}
   sys.cam = { --Camera
     x = 0,
     y = 0
@@ -255,9 +281,10 @@ function PartSys() -- To manage every drawed object
   end
 
   function sys:drawAll()
-    sys:drawShips(sys.cam)
+    sys:drawStars(sys.cam)
     sys:drawBullets(sys.cam)
     sys:drawParticles(sys.cam)
+    sys:drawShips(sys.cam)
     if useButtons then sys.drawButtons() end
   end
 
@@ -285,9 +312,15 @@ function PartSys() -- To manage every drawed object
     end
   end
 
-  function sys:drawButtons(cam)
+  function sys:drawStars(cam)
+    for i, star in pairs(sys.stars) do
+      star:draw(cam)
+    end
+  end
+
+  function sys:drawButtons()
     for i, b in pairs(sys.buttons) do
-      b:draw(cam)
+      b:draw()
     end
   end
 
