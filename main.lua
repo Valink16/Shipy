@@ -63,16 +63,16 @@ function love.load()
         },
 
         bullets = {
-          love.graphics.newImage("assets/missile1.png")
+           love.graphics.newImage("assets/missile1.png")
         }
       }
 
-    for i= -wx / 5, wx + wx / 5, wx / 10 do
-      for a= -wx / 5, wy + wx / 5, wy / 10 do
-        table.insert(sys.stars, Star(math.random(i-50, i+50),math.random(a-50, a+50),0,sys.cam))
+    for i=-100, wx + 100, wx / 10 do
+      for a=-100, wy + 100, wy / 10 do
+        table.insert(sys.stars, Star(math.random(i, i+100),math.random(a, a+100),0,sys.cam))
       end
     end
-    table.insert(sys.ships, Ship(240, 160, 0, 1))
+    table.insert(sys.ships, Ship(wx/2, wy/2, 0, 1))
 
     love.graphics.setBackgroundColor(0, 0, 32, 0)
     buttonSize = love.graphics.getWidth() / 10
@@ -147,19 +147,34 @@ function Star(x, y, d, cam)
   star.depth = d
 
   function star:draw(cam)
-    local x1 = star.ox - cam.x
-    local y1 = star.oy - cam.y
-    love.graphics.line(star.x, star.y, star.x + x1, star.y + y1)
+    local v = Vector(star.ox - cam.x, star.oy - cam.y) * gameScale
+    love.graphics.points(star.x, star.y)
+    love.graphics.line(star.x, star.y, star.x + v.x, star.y + v.y)
     star.ox = cam.x
     star.oy = cam.y
 
-    star.x = star.x + x1
-    star.y = star.y + y1
+    star.x = star.x + v.x
+    star.y = star.y + v.y
 
-    if star.x > wx + 100 then star.x = math.random(-100, 0) end
-    if star.y > wy + 100 then star.y = math.random(-100, 0) end
-    if star.x < -100 then star.x = math.random(wx, wx + 100) end
-    if star.y < -100 then star.y = math.random(wy, wy + 100) end
+    if star.x > wx + 100 then
+      star.x = math.random(-100, 0) 
+      star.y = math.random(-100, wy + 100)
+    end
+    
+    if star.y > wy + 100 then 
+      star.y = math.random(-100, 0)
+      star.x = math.random(-100, wx + 100)
+    end
+    
+    if star.x < -100 then
+      star.x = math.random(wx, wx + 100)
+      star.y = math.random(-100, wy + 100)
+    end
+    
+    if star.y < -100 then
+      star.y = math.random(wy, wy + 100)
+      star.x = math.random(-100, wx + 100)
+    end
 
   end
 
@@ -379,5 +394,7 @@ function love.draw()
   love.graphics.print("ut: "..tostring(updateTime), 0, 24)
   love.graphics.print(love.timer.getFPS(), 0, 36)
   love.graphics.print(debugSys:getSysStats(sys), 0, 48)
+  love.graphics.print("x: "..tostring(sys.cam.x).." y: "..tostring(sys.cam.y), 0, 60)
+
   drawTime = love.timer.getTime() - oldDrawTime
 end
